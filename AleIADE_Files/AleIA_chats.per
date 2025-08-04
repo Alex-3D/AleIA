@@ -1,0 +1,229 @@
+;////////////////////////////BLA BLA BLA...////////////////////////////*
+
+(load-random
+	20	"AleIADE_Files\AleIA_random_chats1"
+	30	"AleIADE_Files\AleIA_random_chats2"
+	30	"AleIADE_Files\AleIA_random_chats3"
+	20	"AleIADE_Files\AleIA_random_chats4"
+)
+
+(defrule
+	(game-time > 7200)
+=>
+	(chat-to-all "27   Dos horas es mucho tiempo")
+	(chat-to-all "¿No tenes nada mejor que hacer?")
+        (set-strategic-number sn-camp-max-distance 200)
+	(disable-self)
+)
+
+(defrule
+	(game-time > 14400)
+=>
+	(chat-to-all "7   ¡¡¡4 HORAS!!!")
+	(chat-to-all "Esta va a ser una de las partidas más largas de mi historia…")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 21600)
+=>
+	(chat-to-all "9 ...")
+	(chat-to-all "Sin comentarios…")
+	(disable-self)
+)
+
+
+(defrule
+	(population <= 70)
+	(players-population every-enemy >= 150)
+	(town-under-attack)
+=>
+	(chat-to-enemies "¡¡¡Mi ciudad NOOOOO!!!!!!!")
+	(chat-to-allies "/12 AYUDAAAAAAAAAAAA!!!!!!!")
+	(chat-to-allies "201")
+	(chat-to-allies "222")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 3000)
+	(building-type-count mining-camp >= 10)
+	(dropsite-min-distance gold > 20)
+=>
+	(chat-to-all "¿Queda algo de oro en este mapa?")
+        (set-strategic-number sn-camp-max-distance 200)
+	(set-goal Gold? NO)
+	(disable-self)
+)
+
+(defrule
+	(civ-selected byzantine)
+	(random-number >= 40)
+	(random-number < 100)
+	(current-age == imperial-age)
+	(research-completed ri-fortified-wall)
+=>
+	(chat-to-all "¡Nadie podrá atravesar los muros de Constantinopla!")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count-total monk >= 10)
+=>
+	(chat-to-all "30")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count-total monk >= 15)
+=>
+	(chat-to-all "18")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count-total monk > 20)
+=>
+	(chat-to-all "30")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count-total monk >= 30)
+=>
+	(chat-to-all "30")
+	(chat-to-all "30")
+	(chat-to-all "30")
+	(disable-self)
+)
+
+(defrule
+        (population-cap < 125)
+	(game-time > 50)
+=>
+	(chat-to-all "no puedo jugar con menos de 125 de población :'(")
+	(disable-self)
+)
+
+(defrule
+	(current-age == dark-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/39 Estoy buscando cuchillios y hachas de piedra en la ALTA EDAD MEDIA :(")
+)
+
+(defrule
+	(current-age == dark-age)
+	(goal Age RESEARCHFEUDAL)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Dije ,Voy a avanzar a la edad feudal...")
+)
+
+(defrule
+	(current-age == feudal-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/39 Estoy en la EDAD FEUDAL...")
+)
+
+(defrule
+	(current-age == feudal-age)
+	(goal Age RESEARCHCASTLE)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Y avanzando a la EDAD DE LOS CASTILLIOS ^^")
+)
+
+(defrule
+	(current-age == castle-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/39 ¿Como? ¡¿No has visto mi gigantesco castillo?!... EDAD DE LOS CASTILLOS si señor :)")
+)
+
+(defrule
+	(current-age == castle-age)
+	(goal Age GOTOIMPERIAL)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Intento avanzar a la edad Imperial")
+)
+
+(defrule
+	(current-age == castle-age)
+	(goal Age RESEARCHIMPERIAL)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Estoy avanzando a la EDAD IMPERIAL =D")
+)
+
+(defrule
+	(current-age == imperial-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/39 Mi imperio se encuentra en el auge de la EDAD IMPERIAL!!!")
+)
+
+;**************chats estrategicos****************
+
+(defrule				
+	(taunt-detected any-ally 49)
+=>
+	(acknowledge-taunt this-any-ally 49)
+	(chat-to-allies "Me centrare mas en la economia y la defenza señor.")
+	(chat-to-allies "/39")
+	(set-goal HumanEstrategia YES)
+	(set-goal Estrategia Eco)
+	(chat-local-to-self "Estrategia economica")
+)
+
+(defrule				
+	(taunt-detected any-ally 51)
+=>
+	(acknowledge-taunt this-any-ally 51)
+	(chat-to-allies "Atacare sin descanso señor!!!")
+	(chat-to-allies "/39")
+	(set-goal HumanEstrategia YES)
+	(set-goal Estrategia Agre)
+	(chat-local-to-self "Estrategia Agresiva")
+)
+
+(defrule				
+	(taunt-detected any-ally 52)
+=>
+	(acknowledge-taunt this-any-ally 52)
+	(chat-to-allies "/39 Enseguida señor, ni mucho, ni poco...")
+	(set-goal HumanEstrategia YES)
+	(set-goal Estrategia Std)
+	(chat-local-to-self "Estrategia Standart")
+)
+
+
+;/////////////PRUEBA/////////////////
+
+(defrule
+	(game-time > 10)
+	(game-time < 20)
+	(cheats-enabled)
+=>
+	(do-nothing)
+	;(up-cc-send-cheat "how do you turn this on")
+)
+
+(defrule
+	(game-time > 10)
+	(game-time < 20)
+=>
+	(do-nothing)
+	;(chat-local-to-self sn-target-player-number)
+	;(up-cc-send-cheat "how do you turn this on")
+)

@@ -1,0 +1,16 @@
+Taun
+43 = Atacar al jugador de mas puntaje
+44 = Decide la maquina
+34 = Juega en modo isla
+35 = Deja de jugar en modo isla
+36 = La AI no ataca hasta que se lo ordenes
+45 = La AI se centra en unidades del castillo
+46 = La AI se centra en unidades de infanteria
+47 = La AI se centra en arqueros
+48 = La AI se centra en unidades de caballeria
+49 = Jega mas economico/defensivo
+51 = Juega mas agresivo/semi-rushero
+52 = juega en modo standart (equilibrado/defensivo)
+31 = Ataca inmediatamente
+53 = Comerciar por tierra
+54 = no comerciar por tierra

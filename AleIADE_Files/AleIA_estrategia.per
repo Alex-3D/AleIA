@@ -1,0 +1,446 @@
+;////////////////////////////////////////////////////////////ESTRATEGIA!!!////////////////////////////////////////////////
+;1 solo jugador
+
+(defrule
+	(game-time > 5)
+=>
+	(up-get-fact treaty-time 0 gl-treaty-time)
+	(set-goal Estrategia Std)
+	(set-goal isTreaty NO) 
+	(chat-local-to-self "ESTRATEGIA STANDART por ahora............")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 6)
+	(or	
+		(up-compare-goal gl-treaty-time >= 301)
+		(up-compare-goal gl-treaty-time <= -1)
+	)
+
+=>
+	(set-goal HumanEstrategia NO)
+	(set-goal isTreaty YES)
+	(set-goal EnabledAttack NO)
+	(chat-to-allies "Estamos en Tratado. Hay que hacer Economia :)")
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 300)
+	(disable-self)
+)
+
+(defrule
+	(goal isTreaty YES)
+	(or	
+		(up-compare-goal gl-treaty-time >= 301)
+		(up-compare-goal gl-treaty-time <= -1)
+	)
+
+=>
+	(set-goal HumanEstrategia NO)
+	(set-goal Estrategia Eco) 
+	(disable-self)
+)
+
+(defrule
+	(timer-triggered AttackTimer)
+	(goal isTreaty YES)
+	(or	
+		(up-compare-goal gl-treaty-time >= 301)
+		(up-compare-goal gl-treaty-time <= -1)
+	)
+=>
+	;(set-goal EnabledAttack NO)
+	(up-get-fact treaty-time 0 gl-treaty-time)
+	(chat-to-allies "Seguimos en Tratado!!!")
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 120)
+)
+
+(defrule
+	(timer-triggered AttackTimer)
+	(goal isTreaty YES)
+	(and	
+		(up-compare-goal gl-treaty-time < 300)
+		(up-compare-goal gl-treaty-time > -1)
+	)
+=>
+	(set-goal isTreaty NO)
+	(set-goal EnabledAttack YES)
+	(set-goal Estrategia Std) ;???
+	(chat-to-allies "Termino el Tratado!!!")
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 1)
+)
+
+(defrule
+	(goal isTreaty NO)
+	(game-time > 53)
+	(game-time < 60)
+	(goal Almirante NO)
+	(not (goal Archipielago YES))
+	(random-number >= 1)
+	(random-number < 50)
+
+=>
+	(set-goal HumanEstrategia NO)
+	(set-goal Estrategia Std) 
+	(chat-to-allies "ESTRATEGIA STANDART")
+	(disable-self)
+)
+
+(defrule
+	(goal isTreaty NO)
+	(game-time > 53)
+	(game-time < 60)
+	(goal Almirante NO)
+	(not (goal Archipielago YES))
+	(random-number >= 50)
+	(random-number <= 75)
+
+=>
+	(set-goal HumanEstrategia NO)
+	(set-goal Estrategia Agre) 
+	(chat-to-allies "ESTRATEGIA RUSHERAAA!!!!")
+	(disable-self)
+)
+
+(defrule
+	(goal isTreaty NO)
+	(game-time > 53)
+	(game-time < 60)
+	(goal Almirante NO)
+	(not (goal Archipielago YES))
+	(random-number > 75)
+	(random-number <= 100)
+
+=>
+	(set-goal HumanEstrategia NO)
+	(set-goal Estrategia Eco) 
+	(chat-to-allies "ESTRATEGIA ECONOMICA.")
+	(disable-self)
+)
+
+;aliados
+
+(defrule
+	(true)
+
+=>
+	(set-goal RushLevel INTR) 
+	(set-goal HumanEstrategia NO)
+	(chat-local-to-self "Soy Rush nivel 1.")
+	(disable-self)
+)
+
+(defrule
+	(goal Almirante NIVELN)
+	(or 
+			(or
+				(or
+					(or
+					(civ-selected aztec)  (civ-selected celtic))
+				(civ-selected gothic))
+			(civ-selected japanese))
+		(civ-selected mayan))
+
+=>
+	(set-goal RushLevel MAX) 
+	(set-goal HumanEstrategia NO)
+	(chat-local-to-self "Correcion, Soy Rush nivel 2.")
+	(disable-self)
+)
+
+(defrule
+	(goal Almirante NIVELN)
+	(or
+		(or 
+			(or
+				(or
+					(or
+					(civ-selected chinese)  (civ-selected spanish))
+				(civ-selected korean))
+			(civ-selected frankish))
+		(civ-selected persian))
+	(civ-selected turkish))
+=>
+	(set-goal RushLevel CERO) 
+	(set-goal HumanEstrategia NO)
+	(chat-local-to-self "Correcion, Soy Rush nivel 0.")
+	(disable-self)
+)
+
+(defrule
+	(goal isTreaty NO)
+	(game-time > 60)
+	(goal RushLevel CERO) 
+
+=>
+	(chat-to-allies "/121")
+	(chat-local-to-self "Soy Rush nivel 0.")
+	(disable-self)
+)
+
+(defrule
+	(goal isTreaty NO)
+	(game-time > 60)
+	(goal RushLevel INTR) 
+
+=>
+	(chat-to-allies "/122")
+	(chat-local-to-self "Soy Rush nivel 1.")
+	(disable-self)
+)
+
+(defrule
+	(goal isTreaty NO)
+	(game-time > 60)
+	(goal RushLevel MAX) 
+
+=>
+	(chat-to-allies "123")
+	(chat-local-to-self "Soy Rush nivel 2.")
+	(disable-self)
+)
+
+
+(defrule
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 121)
+	(goal RushLevel MAX)
+=>
+	(acknowledge-taunt this-any-ally 121)
+	(chat-to-allies "Ok, yo te defiendo.")
+	(chat-to-allies "39")
+	(set-goal Estrategia Agre)
+	(chat-local-to-self "Estrategia RUSHERA!!!")
+)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 122)
+	(goal RushLevel MAX)
+=>
+	(acknowledge-taunt this-any-ally 122)
+	(chat-to-allies "Ok, yo te defiendo.")
+	(chat-to-allies "39")
+	(set-goal Estrategia Agre)
+	(chat-local-to-self "Estrategia RUSHERA!!!")
+)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 123)
+	(goal RushLevel MAX)
+	(research-completed feudal-age)
+	(random-number > 50)
+	(not (goal Estrategia Agre))
+=>
+	(acknowledge-taunt this-any-ally 123)
+	(chat-to-allies "/121 VAMOS A RUSHEAR!!!")
+	(set-goal Estrategia Agre)
+	(chat-local-to-self "Estrategia RUSHERA!!!")
+)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 123)
+	(goal RushLevel MAX)
+	(research-completed feudal-age)
+	(random-number <= 50)
+	(not (goal Estrategia Agre))
+=>
+	(acknowledge-taunt this-any-ally 123)
+	(chat-to-allies "/122 Vos rushea, que yo te ayudo.")
+	(set-goal Estrategia Std)
+	(chat-local-to-self "Estrategia Standart.")
+)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 123)
+	(goal RushLevel INTR)
+	(not (goal Estrategia Agre))
+=>
+	(acknowledge-taunt this-any-ally 123)
+	(chat-to-allies "Ok. avanzo rapido.")
+	(chat-to-allies "/39")
+	(set-goal Estrategia Eco)
+	(chat-local-to-self "Estrategia Economica tipo 2.")
+)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 121)
+	(goal RushLevel INTR)
+=>
+	(acknowledge-taunt this-any-ally 121)
+	(chat-to-allies "Ok. yo te cubro.")
+	(chat-to-allies "/39")
+	(set-goal Estrategia Agre)
+	(chat-local-to-self "Estrategia Rushera.")
+)
+
+;(defrule			
+;	(goal HumanEstrategia NO)	
+;	(taunt-detected any-ally 122)
+;	(goal RushLevel INTR)
+;	(research-completed feudal-age)
+;	(random-number <= 50)
+;	(not (goal Estrategia Agre))
+;=>
+;	(acknowledge-taunt this-any-ally 122)
+;	(chat-to-allies "Seamos los 2 standarts.")
+;	(set-goal Estrategia Std)
+;	(chat-local-to-self "Estrategia Standart.")
+;)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 122)
+	(goal RushLevel INTR)
+	(research-completed feudal-age)
+	(random-number > 50)
+	(not (goal Estrategia Agre))
+=>
+	(acknowledge-taunt this-any-ally 122)
+	(chat-to-allies "/121 Ok, yo me vuelvo economico.")
+	(set-goal Estrategia Eco)
+	(chat-local-to-self "Estrategia economica tipo 2.")
+)
+
+(defrule
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 123)
+	(goal RushLevel CERO)
+=>
+	(acknowledge-taunt this-any-ally 123)
+	(chat-to-allies "Hare economia. :)")
+	(chat-to-allies "/39")
+	(set-goal Estrategia Eco)
+	(chat-local-to-self "Estrategia Economica.")
+)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 122)
+	(goal RushLevel CERO)
+=>
+	(acknowledge-taunt this-any-ally 122)
+	(chat-to-allies "Hare economia. :)")
+	(chat-to-allies "/39")
+	(set-goal Estrategia Eco)
+	(chat-local-to-self "Estrategia Economica.")
+)
+
+(defrule			
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 121)
+	(goal RushLevel CERO)
+	(research-completed feudal-age)
+	(random-number >= 75)
+	(not (goal Estrategia Eco))
+=>
+	(acknowledge-taunt this-any-ally 121)
+	(chat-to-allies "/123 Ok, se vos el economico :)")
+	(set-goal Estrategia Std)
+	(chat-local-to-self "Estrategia Standart.")
+)
+
+;(defrule			
+;	(goal HumanEstrategia NO)	
+;	(taunt-detected any-ally 121)
+;	(goal RushLevel CERO)
+;	(research-completed feudal-age)
+;	(random-number < 75)
+;=>
+;	(acknowledge-taunt this-any-ally 121)
+;	(chat-to-allies "/124 Los 2 standart...")
+;	(set-goal Estrategia Std)
+;	(chat-local-to-self "Estrategia Standart.")
+;)
+
+;(defrule			
+;	(goal HumanEstrategia NO)	
+;	(taunt-detected any-ally 124)
+;=>
+;	(acknowledge-taunt this-any-ally 124)
+;	(chat-to-allies "Ok, Standart sera!")
+;	(set-goal Estrategia Std)
+;	(chat-local-to-self "Estrategia Standart.")
+;)
+
+
+(defrule
+	(goal isTreaty NO)
+	(game-time >= 10)
+	(current-age == imperial-age)
+	(not (goal Estrategia Std))
+	(goal HumanEstrategia NO)
+	(not (goal Archipielago YES))
+	(soldier-count > 50)
+	(unit-type-count villager >= 35)
+
+=>
+	(set-goal Estrategia Std) 
+	(chat-to-allies "/151 Estoy listo para volver a la estrategia Standart.")
+	(chat-local-to-self "volvemos a la estrategia Standart.")
+	(disable-self)
+)
+
+(defrule
+	(goal isTreaty NO)
+	(game-time >= 10)
+	(current-age >= castle-age)
+	(goal Estrategia Eco)
+	(goal RushLevel INTR)
+	(goal HumanEstrategia NO)
+	(not (goal Archipielago YES))
+	(unit-type-count villager >= 35)
+
+=>
+	(set-goal Estrategia Std) 
+	(chat-to-allies "/151 Estoy listo para volver a la estrategia Standart.")
+	(chat-local-to-self "volvemos a la estrategia Standart.")
+	(disable-self)
+)
+
+#load-if-defined BURGUNDIANS-CIV
+(defrule
+	(game-time >= 10)
+	(current-age == imperial-age)
+	(research-completed my-unique-unit-upgrade)
+	(goal Estrategia Eco)
+	(goal HumanEstrategia NO)
+	(not (goal Archipielago YES))
+	(unit-type-count villager >= 50)
+
+=>
+	(set-goal Estrategia Std) 
+	(chat-local-to-self "volvemos a la estrategia Standart.")
+	(disable-self)
+)
+#end-if
+
+(defrule		
+	(goal HumanEstrategia NO)	
+	(not (goal Archipielago YES))
+	(taunt-detected any-ally 151)
+	(goal Estrategia Agre)
+=>
+	(acknowledge-taunt this-any-ally 151)
+	(chat-to-allies "Ok, Devuelta a los parametros normales aliado.")
+	(chat-to-allies "/39")
+	(set-goal Estrategia Std)
+	(chat-local-to-self "Estrategia Standart.")
+)
+

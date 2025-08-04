@@ -1,0 +1,574 @@
+;////////////////////////////BLA BLA BLA...////////////////////////////*
+
+(defrule
+  (game-time >= 15)
+	(random-number >= 1)
+	(random-number < 25)
+=>
+(chat-to-all "39")
+(chat-to-all "Hola")
+(chat-to-all "estas listo?")
+(chat-to-all "Porque yo si ^^")
+(disable-self)
+)
+
+(defrule
+  (game-time >= 20)
+	(random-number >= 25)
+	(random-number < 35)
+=>
+(chat-to-all "39")
+(chat-to-all "Hola")
+(chat-to-all "estas listo?")
+(chat-to-all "Puedo parecer una maquina pero te aseguro q no lo soy")
+(chat-to-all "Ya lo veras")
+(disable-self)
+)
+
+(defrule
+  (game-time >= 25)
+	(random-number >= 90)
+	(random-number < 100)
+=>
+(chat-to-all "39")
+(chat-to-all "Todo el Dia Jugando a esto...")
+(chat-to-all "¿Laburar Nunca?")
+(disable-self)
+)
+
+(defrule
+  (game-time >= 30)
+	(random-number >= 35)
+	(random-number < 50)
+=>
+(chat-to-all "39")
+(chat-to-all "¿Que Onda?")
+(chat-to-all "¿Sale Rush? :)")
+(disable-self)
+)
+
+(defrule
+  (game-time >= 20)
+	(random-number >= 50)
+	(random-number < 70)
+=>
+(chat-to-all "39")
+(chat-to-all "¿Quien Osa Desafiarme Hoy? ^^")
+(chat-to-all "¿Listo para Perder?")
+(disable-self)
+)
+
+
+(defrule
+	(current-age == dark-age)
+	(players-current-age any-enemy == feudal-age)
+=>
+	(chat-to-all "Wou... que velosidad")
+	(disable-self)
+)
+
+(defrule	
+	(current-age <= feudal-age)
+	(players-current-age any-enemy == castle-age)
+=>
+	(chat-to-all "No me impresiona que avances de edad tan rapido")
+	(disable-self)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(players-current-age any-enemy == dark-age)
+	(game-time > 1200)
+=>
+	(chat-to-enemies "¿Sabias que es posible avanzar a la edad Feudal?")
+	(disable-self)
+)
+
+(defrule
+	(current-age == castle-age)
+	(players-current-age any-enemy < castle-age)
+	(game-time > 1800)
+=>
+	(chat-to-all "¡ES INCREIBLE QUE ALGUIEN PUEDA PASAR DE UNA EDAD A OTRA TAN DESPACIO!")
+	(disable-self)
+)
+
+(defrule
+	(current-age == imperial-age)
+	(players-current-age any-enemy < imperial-age)
+	(game-time > 3650)
+=>
+	(chat-to-enemies "Tu retraso tecnologico es evidente, te voy a aplastar jajajaja!")
+	(disable-self)
+)
+(defrule
+	(goal Advantage PLAYER)
+=>
+	(chat-to-all "Te diste cuenta estoy ganado...... JAJA!")
+	(disable-self)
+)
+
+(defrule
+	(current-age >= castle-age)
+	(goal Advantage PLAYER)
+	(goal ArmyAdvantage PLAYER)
+=>
+	(chat-to-all "Estoy a punto de ganar.")
+	(disable-self)
+)
+
+(defrule
+	(goal Advantage ENEMY)
+	(goal ArmyAdvantage ENEMY)
+=>
+	(chat-to-all "Como es que estoy perdiendo. ¡¡¡Debe ser culpa del idiota que me programo!!!")
+	(disable-self)
+)
+
+
+(defrule
+	(current-age == imperial-age)
+	(goal Advantage PLAYER)
+	(goal ArmyAdvantage PLAYER)
+=>
+	(chat-to-all "Creo que... deberias retirarte no?")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 3600)
+=>
+	(chat-to-all "Parece que esta batalla podria ser mas interesante de lo que esperaba")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 7200)
+=>
+	(chat-to-all "27   Dos horas es mucho tiempo")
+	(chat-to-all "¿No tienes nada mejor que hacer?")
+        (set-strategic-number sn-camp-max-distance 200)
+	(disable-self)
+)
+
+(defrule
+	(game-time > 14400)
+=>
+	(chat-to-all "7   ¡¡¡4 HORAS!!!")
+	(chat-to-all "Esta va a ser una de las partidas más largas de mi historia…")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 21600)
+=>
+	(chat-to-all "9 ...")
+	(chat-to-all "Sin comentarios…")
+	(disable-self)
+)
+
+(defrule
+	(player-resigned any-ally)
+=>
+	(chat-to-all "¡Mi pobre alliado!. ¡Vas a pagar por eso!")
+	(disable-self)
+)
+
+(defrule
+	(player-resigned any-enemy)
+=>
+	(chat-to-all "Uno menos JAJAJAJAJAJAJAJA!!!!!")
+	(chat-to-all "11")
+	(disable-self)
+)
+
+
+(defrule
+	(resource-found food)
+	(resource-found wood)
+	(resource-found gold)
+	(resource-found stone)
+=>
+	(chat-to-all "Bien, ya tengo todo lo que nesesito")
+	(disable-self)
+)
+
+(defrule
+	(population == 200)
+=>
+	(chat-to-all "¡Mierda! ya estoy en el limite de población")
+	(chat-to-all "¡Le dije al idiota de Bill Gates que pusiera por lo menos 500!")
+	(chat-to-all "24")
+	(disable-self)
+)
+
+(defrule
+	(population >= 150)
+	(players-population every-enemy <= 30)
+=>
+	(chat-to-enemies "¿Porque te parecio buena idea enfrentarte a mi?")
+	(chat-to-allies "¡El patetico enemigo, debe estar deseando no haber nacido JAJAJAJA!!!!!")
+	(chat-to-allies "/11")
+	(disable-self)
+)
+
+(defrule
+	(population <= 70)
+	(players-population every-enemy >= 150)
+	(town-under-attack)
+=>
+	(chat-to-enemies "¡¡¡Mi ciudad NOOOOO!!!!!!!")
+	(chat-to-allies "/12 AYUDAAAAAAAAAAAA!!!!!!!")
+	(chat-to-allies "201")
+	(chat-to-allies "222")
+	(disable-self)
+)
+
+;POSIBLE
+;(defrule
+;	(goal AllowMilitaryTechs 1)
+;	(building-type-count stone-wall-line > 0)
+;	(can-research-with-escrow ri-fortified-wall)
+;=>
+;	(release-escrow wood)
+;	(release-escrow food)
+;	(release-escrow gold)
+;	(release-escrow stone)
+;	(research ri-fortified-wall)
+;	(chat-to-all "Haber si alguien puede atravesar estas murallas…")
+;	(chat-local-to-self "research fortifications")
+;	(disable-self)
+;)
+
+(defrule
+	(players-unit-type-count any-enemy monk >= 5)
+=>
+	(chat-to-enemies "Monjes!? ¡que cobarde!")
+	(chat-to-allies "El enemigo esta usando monjes, ¡Los voy a matar a todos!")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 3000)
+	(building-type-count mining-camp >= 10)
+	(dropsite-min-distance gold > 20)
+=>
+	(chat-to-all "¿Queda algo de oro en este mapa?")
+        (set-strategic-number sn-camp-max-distance 200)
+	(set-goal Gold? NO)
+	(disable-self)
+)
+
+(defrule
+	(civ-selected byzantine)
+	(current-age == imperial-age)
+	(research-completed ri-fortified-wall)
+=>
+	(chat-to-all "¡Nadie podrá atravesar los muros de Constantinopla!")
+	(disable-self)
+)
+
+
+(defrule
+	(unit-type-count-total monk >= 10)
+=>
+	(chat-to-all "30")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count-total monk >= 15)
+=>
+	(chat-to-all "18")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count-total monk > 20)
+=>
+	(chat-to-all "30")
+	(disable-self)
+)
+
+(defrule
+	(unit-type-count-total monk >= 30)
+=>
+	(chat-to-all "30")
+	(chat-to-all "30")
+	(chat-to-all "30")
+	(disable-self)
+)
+
+(defrule
+        (population-cap < 125)
+	(game-time > 50)
+=>
+	(chat-to-all "no puedo jugar con menos de 125 de población :'(")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 125)
+	(game-time > 50)
+=>
+	(chat-to-all "Pero q población de mierda...")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 150)
+	(game-time > 50)
+=>
+	(chat-to-all ",150, no me gusta mucho ese limite pero we...")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 175)
+	(game-time > 50)
+=>
+	(chat-to-all "juego mejor con 200 de poblacion, pero derrotare a mis enemigos igualmente ^^")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 200)
+	(game-time > 50)
+=>
+	(chat-to-all "!BIEN! 200 de poblacion ¡asi se juega!")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected aztec)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "De todas las unidades del juego me tube que hacer tantos negros...... baaaaa")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected briton)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Odio a los Britanicos")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected byzantine)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Me agradan las catafractas")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected celtic)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Si, si, no son muy fuertes, pero son rapidos...")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected chinese)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Estos chinos de mierda son mas utiles de lo que pensaba")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected gothic)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Lo mejor de los godos, un interminable ejercito de Huscarles")
+	(chat-to-all "¡HA muerte soldadossssss!!!!!")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected frankish)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Lo que mas me gusta de los Francos son los Paladines...")
+	(chat-to-all "Pero los lansadores de hachas tambien son buenos")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected japanese)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Banzaiiiiiii!!! Espero que estos pateticos Samurais sean tan buenos como los pintan")
+	(chat-to-all "PD:Odio Naruto!")
+	(disable-self)
+)
+
+
+
+(defrule
+	(civ-selected korean)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Muchas Torres... pero tambien Carretas de guerra")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected mayan)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "HOOO,,, genial mas negros con plumas en la cabeza")
+	(chat-to-all "(Y eso que yo no soy racista)")
+	(chat-to-all "11")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected spanish)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Los Gallegos seran boludos, pero son buenos en el combate.")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected viking)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Me encantan los Guerreros en Trance!!")
+	(chat-to-all "¡Preparense para una gran imbacion barbara!!!!")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected mongol)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Buenos Husares, Pero mejores arqueros a caballo.")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected turkish)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "¡Polvora, polvora y mas polvora jajajaja!")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected saracen)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Perfecto ahora espero que vengas con mucha caballeria")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected persian)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Adoro los ELEFANTES, Ahora te voy a aplastar.....jajajajaja!")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected hun)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "AHORA VOY A QUEMAR TODAS LAS CASAS QUE ENCUENTRE")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected teutonic)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "¡¡¡Muevanse de una vez lentonicos!!!!")
+	(disable-self)
+)
+
+(defrule
+	(current-age == dark-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/39 Estoy buscando cuchillios y hachas de piedra en la ALTA EDAD MEDIA :(")
+)
+
+(defrule
+	(current-age == dark-age)
+	(goal Age RESEARCHFEUDAL)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Dije ,Voy a avanzar a la edad feudal...")
+)
+
+(defrule
+	(current-age == feudal-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/39 Estoy en la EDAD FEUDAL...")
+)
+
+(defrule
+	(current-age == feudal-age)
+	(goal Age RESEARCHCASTLE)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Y avanzando a la EDAD DE LOS CASTILLIOS ^^")
+)
+
+(defrule
+	(current-age == castle-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/39 ¿Como? ¡¿No has visto mi gigantesco castillo?!... EDAD DE LOS CASTILLOS si señor :)")
+)
+
+(defrule
+	(current-age == castle-age)
+	(goal Age GOTOIMPERIAL)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Intento avanzar a la edad Imperial")
+)
+
+(defrule
+	(current-age == castle-age)
+	(goal Age RESEARCHIMPERIAL)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "Estoy avanzando a la EDAD IMPERIAL =D")
+)
+
+(defrule
+	(current-age == imperial-age)
+	(taunt-detected any-ally 42)
+=>
+	(acknowledge-taunt this-any-ally 42)
+	(chat-to-allies "/31 Mi imperio se encuentra en el auge de la EDAD IMPERIAL!!!")
+)

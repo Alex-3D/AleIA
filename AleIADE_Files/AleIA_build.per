@@ -1,0 +1,272 @@
+
+(defrule
+          (true)
+=>
+          (set-goal wallMap standard)
+          (disable-self)
+)
+
+(defrule
+	      (goal wallMap standard)
+	      (or
+		      (current-age == imperial-age) 
+		      (and 
+		      	(goal Estrategia Eco) (current-age >= castle-age)
+		      )
+	      )
+	      (building-type-count-total castle > 1)
+
+=>
+	      (set-goal wallMap YES)
+	      (disable-self)
+)
+
+(defrule
+	      (goal wallMap veryFriendly)
+	      (or
+		      (and 
+		      	(current-age >= castle-age) (building-type-count-total castle >= 1)
+		      ) 
+		      (and 
+		      	(goal Estrategia Eco) (current-age >= feudal-age)
+		      )
+	      )
+
+=>
+	      (set-goal wallMap YES)
+	      (disable-self)
+)
+
+(defrule
+	      (goal wallMap friendly)
+	      (current-age >= castle-age)
+	      (building-type-count-total castle > 1)
+
+=>
+	      (set-goal wallMap YES)
+	      (disable-self)
+)
+
+(defrule
+	      (goal wallMap choto)
+	      (building-type-count-total castle > 1)
+	      (building-type-count-total wonder >= 1)
+
+=>
+	      (set-goal wallMap YES)
+	      (disable-self)
+)
+
+
+(defrule
+	(game-time > 10)
+	(game-time < 20)
+	(building-type-count stone-wall-line > 2)
+=>
+	(chat-local-to-self "detecting walled map!")
+	(set-goal wallMap choto)
+	(disable-self)
+)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;WALL
+
+
+(defrule
+                  (map-size tiny)
+=>
+                  (enable-wall-placement 1)
+                  (disable-self)
+)
+
+(defrule
+                  (current-age >= feudal-age)
+                  (not (map-size tiny) )
+=>
+                  (enable-wall-placement 2)
+                  (disable-self)
+)
+
+(defrule
+		(goal wallMap YES)
+                  (current-age >= feudal-age)
+		  (game-time > 300)
+	(can-build-wall-with-escrow 2 stone-wall-line)
+	(or
+		(can-afford-complete-wall 2 stone-wall-line)
+		(or	(stone-amount > 115) (goal Estrategia Eco))
+	)
+=>
+	
+	(build-wall 2 stone-wall-line)
+)
+
+(defrule
+		(goal wallMap YES)
+                  (current-age >= feudal-age)
+		  (game-time > 300)
+	(wall-completed-percentage 2 >= 75)
+	(wall-completed-percentage 2 < 100)
+	(can-build-wall-with-escrow 2 stone-wall-line)
+=>
+	
+	(build-wall 2 stone-wall-line)
+)
+
+(defrule
+		(goal wallMap YES)
+                  (current-age >= feudal-age)
+		  (game-time > 300)
+	(building-type-count-total gate < 8)
+	(can-build-gate-with-escrow 2)
+=>
+	
+	(build-gate 2)
+)
+
+;*****"1"***
+
+(defrule
+		(goal wallMap YES)
+                  (current-age >= feudal-age)
+		  (game-time > 300)
+	(can-build-wall-with-escrow 2 stone-wall-line)
+	(or
+		(can-afford-complete-wall 2 stone-wall-line)
+		(or	(stone-amount > 115) (goal Estrategia Eco))
+	)
+=>
+	
+	(build-wall 2 stone-wall-line)
+)
+
+(defrule
+		(goal wallMap YES)
+                  (current-age >= feudal-age)
+		  (game-time > 300)
+	(wall-completed-percentage 2 >= 75)
+	(wall-completed-percentage 2 < 100)
+	(can-build-wall-with-escrow 2 stone-wall-line)
+=>
+	
+	(build-wall 2 stone-wall-line)
+)
+
+(defrule
+		(goal wallMap YES)
+                  (current-age >= feudal-age)
+		  (game-time > 300)
+	(building-type-count-total gate < 6)
+	(can-build-gate-with-escrow 2)
+=>
+	
+	(build-gate 2)
+)
+
+(defrule
+		(goal wallMap YES)
+                  (current-age >= feudal-age)
+		  (game-time > 300)
+	(map-type black-forest)
+	(building-type-count-total gate < 10)
+	(can-build-gate-with-escrow 2)
+=>
+	
+	(build-gate 2)
+)
+
+;*******
+
+(defrule
+                  (current-age == imperial-age)
+	(building-type-count-total bombard-tower < 10)
+                  (building-type-count-total castle >= 1)
+	(not (strategic-number sn-maximum-town-size == 70))
+	(can-build bombard-tower)
+=>
+	(build bombard-tower)
+	(chat-local-to-self "bombard tower")
+)
+
+(defrule
+                  (current-age == feudal-age)
+	(building-type-count-total watch-tower-line < 4)
+	(can-build watch-tower-line)
+=>
+	(build watch-tower-line)
+	(chat-local-to-self "watch tower")
+)
+
+(defrule
+                  (current-age >= castle-age)
+	(building-type-count-total watch-tower-line < 7)
+                  (building-type-count-total castle > 1)
+	(can-build watch-tower-line)
+	(not (strategic-number sn-maximum-town-size == 70))
+=>
+	(build watch-tower-line)
+	(chat-local-to-self "watch tower")
+)
+
+(defrule
+                  (current-age >= castle-age)
+            (or
+                  (civ-selected korean)
+                  (civ-selected gothic)
+            )
+	(building-type-count-total watch-tower-line < 10)
+                  (building-type-count-total castle > 1)
+	(not (strategic-number sn-maximum-town-size == 70))
+	(can-build watch-tower-line)
+=>
+	(build watch-tower-line)
+	(chat-local-to-self "watch tower")
+)
+
+(defrule
+	(goal oceanmap YES)
+                  (current-age == imperial-age)
+	(building-type-count-total watch-tower-line < 15)
+                  (building-type-count-total castle > 2)
+	(not (building-available bombard-tower))
+	(can-build watch-tower-line)
+=>
+	(build watch-tower-line)
+	(chat-local-to-self "watch tower")
+)
+
+#load-if-defined SICILIANS-CIV
+(defrule
+        (current-age == feudal-age)
+	(building-type-count-total donjon < 2)
+	(can-build donjon)
+=>
+	(build donjon)
+	(chat-local-to-self "donjon")
+)
+
+(defrule
+        (current-age >= castle-age)
+	(building-type-count-total donjon < 7)
+        (building-type-count-total castle > 1)
+	(can-build donjon)
+	(not (strategic-number sn-maximum-town-size == 70))
+=>
+	(build donjon)
+	(chat-local-to-self "donjon")
+)
+
+(defrule
+	(goal ATTACK YES)
+	(building-type-count castle > 2)
+        (stone-amount > 200)
+	(building-type-count-total donjon less-than 10)
+	(current-age == imperial-age)
+	(soldier-count >= 80)
+	(can-build donjon)
+=>
+	(build-forward donjon)
+	(chat-local-to-self "Rush? donjon")
+)
+#end-if

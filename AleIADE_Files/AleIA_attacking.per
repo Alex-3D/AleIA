@@ -1,0 +1,801 @@
+; ============== ATTACKING -.
+
+(defrule
+	(true)
+=>
+	(enable-timer AttackTimer 1)
+	(disable-self)
+)
+
+(defrule
+	(true)
+=>
+	(set-goal EnabledAttack YES)
+	(set-goal ATTACK NO)
+	(disable-self)
+)
+
+(defrule
+	(goal ATTACK YES)
+	(game-time > 120)
+	(game-time < 1200)
+	(soldier-count < 50)
+=>
+	(chat-to-allies "Voy a dar el primer asalto")
+	(chat-to-enemies "PREPARATE PARA MORIR")
+	(chat-local-to-self "detecting first attack")
+	(disable-self)
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal dificultad masQueModerado)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(not (goal Estrategia Agre))
+	(soldier-count >= 15)
+	(soldier-count < 50)
+	;(strategic-number sn-target-player-number > 0)
+	(cc-players-building-type-count every-enemy castle < 1) ; TODO ESTO DEBE SER CAMBIADO POR TARGET
+	(cc-players-unit-count any-enemy < 10)
+	(goal AllowMilitaryUnits YES)
+	(not (goal EnabledAttack NO))
+=>
+	;(attack-now)
+	(set-goal ATTACK YES)
+	(chat-local-to-self "first attack")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal dificultad masQueModerado)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal Estrategia Agre)
+	(soldier-count >= 10)
+	(soldier-count < 50)
+	;(strategic-number sn-target-player-number > 0)
+	(cc-players-building-type-count any-enemy castle < 1) ; TODO ESTO DEBE SER CAMBIADO POR TARGET
+	(cc-players-unit-count any-enemy < 10)
+	(goal AllowMilitaryUnits YES)
+	(not (goal EnabledAttack NO))
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "first attack")
+)
+
+(defrule
+	;(timer-triggered AttackTimer) ;COMBATE TOTAL
+	(goal dificultad masQueModerado)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(food-amount > 6000)
+	(soldier-count >= 15)
+	(soldier-count < 50)
+	(goal AllowMilitaryUnits YES)
+	(not (goal EnabledAttack NO))
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "first attack")
+)
+
+
+;(defrule
+;	(goal ATTACK YES)
+;	(not (town-under-attack))
+;	(current-age >= castle-age)
+;	(soldier-count >= 10)
+;	(game-time < 1800)
+;	(goal AllowMilitaryUnits YES)
+;	(not (goal EnabledAttack NO))
+;=>
+;	(attack-now)
+;	(chat-to-allies "Voy a dar el primer asalto")
+;	(chat-to-enemies "PREPARATE PARA MORIR")
+;	(set-goal ATTACK NO)
+;	(disable-self)
+;	(chat-local-to-self "first attack")
+;)
+
+(defrule
+	(goal ATTACK NO)
+	(goal feudalWars YES)
+	(goal Estrategia Agre)
+	(not (town-under-attack))
+	(current-age == feudal-age)
+	(soldier-count >= 10)
+	(not (goal EnabledAttack NO))
+=>
+	(set-goal ATTACK YES)
+	(disable-self)
+	(chat-local-to-self "first attack (rushero)")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(goal feudalWars YES)
+	(goal Estrategia Agre)
+	(not (town-under-attack))
+	(current-age == feudal-age)
+	(soldier-count >= 15)
+	(not (goal EnabledAttack NO))
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "Ataque feudal")
+)
+
+(defrule
+	(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	;(goal AllowMilitaryUnits YES)
+	(not (town-under-attack))
+	;(defend-soldier-count >= 10)
+	(current-age == feudal-age)
+	(not (goal oceanmap YES))
+	(not (goal EnabledAttack NO))
+=>
+	(attack-now)
+	(chat-to-allies "Al Ataque! quemadlo todo!!!")
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 120)
+	(chat-local-to-self "feudal attacks")
+)
+
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	(soldier-count <= 5)
+	(current-age == feudal-age)
+=>
+	(set-goal ATTACK NO)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 1)
+	(chat-local-to-self "not feudal attacks")
+)
+
+(defrule
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal dificultad masQueModerado)
+	(or
+	(goal Advantage PLAYER)	(goal Estrategia Agre))
+	(goal AllowMilitaryUnits YES)
+	(current-age == castle-age)
+	(soldier-count >= 30)
+	(unit-type-count-total battering-ram-line > 2)
+	(research-completed ri-hand-cart)
+=>
+	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting other attacks")
+)
+
+(defrule
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal dificultad masQueModerado)
+	(or
+	(goal Advantage PLAYER)	(goal Estrategia Agre))
+	(goal AllowMilitaryUnits YES)
+	(current-age >= castle-age)
+	(soldier-count > 20)
+	;(strategic-number sn-target-player-number > 0)
+	(cc-players-building-type-count any-enemy castle < 1) ;TARGET
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "detecting fast attacks")
+)
+
+(defrule
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	;(goal Advantage ENEMY)
+	(goal AllowMilitaryUnits YES)
+	(current-age == castle-age)
+	(soldier-count >= 50)
+	(unit-type-count-total battering-ram-line > 4)
+	(research-completed ri-hand-cart)
+=>
+	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting other attacks")
+)
+
+(defrule
+	(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	;(goal AllowMilitaryUnits YES)
+	(not (town-under-attack))
+	;(defend-soldier-count >= 10) VEAMOS Q PASA...
+	(current-age == castle-age)
+	(not (goal oceanmap YES))
+	(not (goal EnabledAttack NO))
+=>
+	(attack-now)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 240)
+	(up-chat-data-to-player my-player-number "sn-target-player: %d." s: sn-target-player-number)
+	(up-chat-data-to-player my-player-number "sn-focus-player: %d." s: sn-focus-player-number)
+	(chat-local-to-self "Ataque castillesco 1")
+)
+
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	(or
+	(food-amount < 6000)	(soldier-count < 5))
+	(soldier-count <= 20)
+	(current-age == castle-age)
+=>
+	(set-goal ATTACK NO)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 60)
+	(chat-local-to-self "not other attacks")
+)
+
+(defrule				
+	(goal isTreaty NO)
+	(taunt-detected any-ally 31)
+	(not (town-under-attack))
+	(not (goal Wonderr MYW))
+	(soldier-count >= 10)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(chat-to-allies "Si señor, ¡los voy a aplastar!")
+	(chat-to-allies "39")
+	(attack-now)
+	(set-goal EnabledAttack YES)
+;	(set-goal ATTACK NO)
+	(set-strategic-number sn-target-evaluation-ally-proximity 1000)
+	(chat-local-to-self "allies attacks")
+)
+
+(defrule				
+	(taunt-detected any-ally 31)
+	(goal Wonderr MYW)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(chat-to-allies "No puedo obedecerlo ahora señor, tengo una MARAVILLA que defender!.")
+	(chat-to-allies "39")
+	(chat-local-to-self "NO allies attacks")
+)
+
+(defrule			
+	(goal isTreaty NO)	
+	(taunt-detected any-ally 31)
+	(not (town-under-attack))
+	(not (goal Wonderr MYW))
+	(not (goal Wonderr ALLYW))
+	(soldier-count < 10)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(chat-to-allies "Lo siento señor pero ¡TENGO MENOS DE 10 SOLDADOS :`(!")
+	(chat-to-allies "39")
+	(set-goal EnabledAttack YES)
+	(set-strategic-number sn-target-evaluation-ally-proximity 1000)
+	(chat-local-to-self "allies attacks")
+)
+
+(defrule			
+	(goal isTreaty YES)	
+	(taunt-detected any-ally 31)
+	(goal Wonderr MYW)
+=>
+	(acknowledge-taunt this-any-ally 31)
+	(chat-to-allies "No puedo obedecerlo ahora señor, estamos en Treaty!.")
+	(chat-to-allies "39")
+	(chat-local-to-self "NO allies attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(population >= 200)
+	(current-age-time > 600)
+	(not (goal EnabledAttack NO))
+=>
+	(chat-local-to-self "ALL attack!")
+	(set-goal ATTACK YES)
+)
+
+#load-if-defined POPULATION-CAP-175
+(defrule
+        (population-cap == 175)
+	(population >= 175)
+	(current-age-time > 600)
+	(not (goal EnabledAttack NO))
+=>
+	(chat-local-to-self "ALL attack")
+	(set-goal ATTACK YES)
+)
+#end-if
+
+#load-if-defined POPULATION-CAP-150
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+        (population-cap == 150)
+	(population >= 150)
+	(current-age-time > 600)
+	(not (goal EnabledAttack NO))
+=>
+	(chat-local-to-self "ALL attack")
+	(set-goal ATTACK YES)
+)
+#end-if
+
+#load-if-defined POPULATION-CAP-125
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+        (population-cap == 125)
+	(population >= 125)
+	(current-age-time > 600)
+	(not (goal EnabledAttack NO))
+=>
+	(chat-local-to-self "ALL attack")
+	(set-goal ATTACK YES)
+)
+#end-if
+
+;(defrule
+;	(timer-triggered AttackTimer)
+;	(goal ATTACK YES)
+;	(goal AllowMilitaryUnits YES)
+;	(not (town-under-attack))
+;	;(defend-soldier-count >= 10)
+;	(soldier-count > 30)
+;	(current-age == imperial-age)
+;	(research-completed ri-chemistry)
+;	(research-completed my-unique-unit-upgrade)
+;	(research-completed ri-capped-ram)
+;	(not (goal EnabledAttack NO))
+;	(not (goal oceanmap YES))
+;	(goal techsready YES)
+;=>
+;	(attack-now)
+;	(disable-timer AttackTimer)
+;	(enable-timer AttackTimer 120)
+;	;(chat-local-to-self "other attacks")
+;)
+
+;(defrule
+;	(timer-triggered AttackTimer)
+;	(goal ATTACK YES)
+;	(soldier-count <= 30)
+;	(current-age == imperial-age)
+;	(research-completed ri-chemistry)
+;	(research-completed my-unique-unit-upgrade)
+;	(research-completed ri-capped-ram)
+;	(goal techsready YES)
+;=>
+;	(set-goal ATTACK NO)
+;	(set-strategic-number sn-maximum-attack-group-size 40)
+;	(set-strategic-number sn-minimum-attack-group-size 40)
+;	(disable-timer AttackTimer)
+;	(enable-timer AttackTimer 1)
+;	(chat-local-to-self "not other attacks")
+;)
+
+;(defrule
+;	(timer-triggered AttackTimer)
+;	(goal ATTACK NO)
+;	(not (town-under-attack))
+;	(goal AllowMilitaryUnits YES)
+;	(goal techsready YES)
+;	(current-age == imperial-age)
+;	(soldier-count >= 100)
+;	(players-population every-enemy < 190)
+;	(or
+;	(unit-type-count-total battering-ram-line > 4)
+;	(unit-type-count-total trebuchet > 1))
+;=>
+;	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting other attacks 1")
+;)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal AllowMilitaryUnits YES)
+	(game-time < 5400)	
+	(or
+		(players-stance any-computer ally)
+		(players-stance any-human ally)
+	)
+	(current-age == imperial-age)
+	(soldier-count >= 85)
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "detecting allies attacks 1")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(game-time < 5400)
+	(goal AllowMilitaryUnits YES)
+	(or
+		(players-stance any-computer ally)
+		(players-stance any-human ally)
+	)	
+	(current-age == imperial-age)
+	(soldier-count >= 75)
+	(or
+	(research-completed my-unique-unit-upgrade) 	(research-completed ri-paladin)
+	)
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "detecting allies attacks 2")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal AllowMilitaryUnits YES)
+	(or
+	(goal Advantage PLAYER)	(goal Estrategia Agre))
+	(current-age == imperial-age)
+	(soldier-count >= 80)
+	(or
+	(unit-type-count-total battering-ram-line > 3)
+	(unit-type-count-total trebuchet > 1))
+	(research-completed ri-chemistry)
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "detecting other attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal AllowMilitaryUnits YES)
+	(current-age == imperial-age)
+	(soldier-count >= 100)
+	(unit-type-count-total trebuchet > 2)
+	(research-completed ri-chemistry)
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "detecting other attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal AllowMilitaryUnits YES)
+	(current-age == imperial-age)
+	(soldier-count >= 80)
+	(unit-type-count-total trebuchet >= 4)
+	(or
+	(research-completed my-unique-unit-upgrade) 	(research-completed ri-paladin)
+	)
+	(research-completed ri-chemistry)
+=>
+	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting other attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal AllowMilitaryUnits YES)
+	(or
+	(goal Advantage PLAYER)	(goal Estrategia Agre))
+	;(not (goal Advantage ENEMY))
+	(current-age == imperial-age)
+	(soldier-count >= 70)
+	(unit-type-count-total battering-ram-line > 3)
+	(research-completed ri-chemistry)
+=>
+	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting other attacks")
+)
+
+
+(defrule
+	(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	;(goal AllowMilitaryUnits YES)
+	(not (town-under-attack))
+	(soldier-count < 80)
+	(current-age == imperial-age)
+	(not (goal oceanmap YES))
+	;(research-completed ri-chemistry)
+	(not (goal EnabledAttack NO))
+=>
+	(attack-now)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 120)
+	(up-chat-data-to-player my-player-number "sn-target-player: %d." s: sn-target-player-number)
+	(up-chat-data-to-player my-player-number "sn-focus-player: %d." s: sn-focus-player-number)
+	(chat-to-allies "39 Ataque Imperial I")
+	;(chat-local-to-self "Ataque Imperial I")
+)
+
+(defrule
+	(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	;(goal AllowMilitaryUnits YES)
+	(not (town-under-attack))
+	(soldier-count >= 80)
+	(current-age == imperial-age)
+	(not (goal oceanmap YES))
+	;(research-completed ri-chemistry)
+	(not (goal EnabledAttack NO))
+=>
+	(attack-now)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 60)
+	(up-chat-data-to-player my-player-number "sn-target-player: %d." s: sn-target-player-number)
+	(up-chat-data-to-player my-player-number "sn-focus-player: %d." s: sn-focus-player-number)
+	(chat-to-allies "39 Ataque Imperial II")
+	;(chat-local-to-self "Ataque Imperial II")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(or
+	(food-amount < 6000)	(soldier-count < 5))
+	(soldier-count <= 30)
+	(unit-type-count-total trebuchet > 8)
+	(current-age == imperial-age)
+	(not (goal oceanmap YES))
+=>
+	;(up-retreat-now)
+	(chat-local-to-self "Trebu retreat")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	(goal Advantage ENEMY)
+	(or
+	(food-amount < 6000)	(soldier-count < 5))
+	(soldier-count <= 45)
+	(current-age == imperial-age)
+	;(research-completed ri-chemistry)
+=>
+	(set-goal ATTACK NO)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 60)
+	(set-strategic-number sn-maximum-attack-group-size 60)
+	(set-strategic-number sn-minimum-attack-group-size 60)
+	;(chat-local-to-self "not other attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	(or
+	(food-amount < 6000)	(soldier-count < 5))
+	(soldier-count <= 30)
+	(current-age == imperial-age)
+	;(research-completed ri-chemistry)
+=>
+	(set-goal ATTACK NO)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 60)
+	(set-strategic-number sn-maximum-attack-group-size 60)
+	(set-strategic-number sn-minimum-attack-group-size 60)
+	;(chat-local-to-self "not other attacks")
+)
+
+
+(defrule			
+	(taunt-detected any-ally 36)
+=>
+	(acknowledge-taunt this-any-ally 36)
+	(chat-to-allies "Mmm..... No me agrada pero lo hare")
+	(chat-to-allies "39")
+	(set-goal EnabledAttack NO)
+	(set-goal ATTACK NO)
+	(chat-local-to-self "No attacks")
+)
+
+(defrule
+	(current-age == imperial-age)
+	(soldier-count <= 30)
+	(current-age-time > 1800)
+	(goal AllowMilitaryUnits NO)
+	(research-completed ri-chemistry)
+	(research-completed my-unique-unit-upgrade)
+=>
+	(set-goal AllowMilitaryUnits YES)						
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(goal Age RESEARCHIMPERIAL)
+	(goal dificultad masQueModerado)
+	(not (town-under-attack))
+	(not (goal oceanmap YES))
+	(not (goal EnabledAttack NO))
+	(soldier-count >= 65)
+	(unit-type-count-total battering-ram-line >= 2)
+=>
+	(set-goal ATTACK YES)
+	(chat-local-to-self "Castle attack!")
+	(chat-to-allies "39 Intentare sorprender al enemigo ^^")
+	(disable-self)
+)
+
+
+;(defrule
+;	(goal ATTACK YES)
+;	(goal Formation YES)
+;	(soldier-count <= 100)
+;	(players-military-population every-enemy < 50)
+;	(current-age == imperial-age)
+;	(research-completed ri-chemistry)
+;=>
+;	(set-strategic-number sn-maximum-attack-group-size 1)
+;	(set-strategic-number sn-minimum-attack-group-size 1)
+;	(chat-local-to-self "strategic-number 0")
+;)
+
+;*********SHIPS attacks
+
+(defrule
+	(goal Age RESEARCHIMPERIAL)
+	(goal dificultad masQueModerado)
+	(goal oceanmap YES)
+	(not (town-under-attack))
+	(not (goal EnabledAttack NO))
+	(soldier-count >= 15)
+	(unit-type-count-total warships > 10)
+=>
+	(attack-now)
+	(chat-local-to-self "SHIP ARMY attack!")
+	(disable-self)
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal oceanmap YES)
+	(current-age == imperial-age)
+	(soldier-count >= 20)
+	(unit-type-count-total warships > 20)
+	(unit-type-count-total cannon-galleon-line > 5)
+=>
+	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting Ships attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal oceanmap YES)
+	(current-age == imperial-age)
+	(soldier-count >= 20)
+	(unit-type-count-total warships > 20)
+	(unit-type-count-total cannon-galleon-line > 2)
+	(research-completed 376)
+=>
+	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting Ships attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK NO)
+	(not (town-under-attack))
+	(goal oceanmap YES)
+	(current-age == imperial-age)
+	(soldier-count >= 20)
+	(unit-type-count-total warships > 30)
+	(not (unit-available cannon-galleon-line))
+=>
+	(set-goal ATTACK YES)
+	;(chat-local-to-self "detecting Boats attacks")
+)
+
+(defrule
+	;(timer-triggered AttackTimer)
+	(goal ATTACK YES)
+	(goal oceanmap YES)
+	(unit-type-count-total warships < 3)
+	(current-age == imperial-age)
+	(research-completed ri-chemistry)
+=>
+	(set-goal ATTACK NO)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 1)
+	(set-strategic-number sn-maximum-attack-group-size 40)
+	(set-strategic-number sn-minimum-attack-group-size 20)
+	;(chat-local-to-self "not Ships attacks")
+)
+
+;***********¡HA LAS ARMAS!********
+
+(defrule
+	(timer-triggered AttackTimer)
+                  (current-age >= castle-age)
+	(strategic-number sn-attack-winning-player == 1)
+	(goal ATTACK YES)
+	(not (goal EnabledAttack NO))
+=>
+	(chat-to-allies "143")
+)
+
+;(defrule
+;	(timer-triggered AttackTimer)
+;	(current-age >= castle-age)
+;	(goal ATTACK YES)
+;	(not (goal oceanmap YES))
+;	(not (goal EnabledAttack NO))
+;	(population < 200)
+;=>
+;	(chat-to-allies "¡¡¡¡¡¡MUERTE... MUERTE A TODO AQUEL QUE NOS ESTORBEEEEEE!!!!!!")
+;	(chat-to-allies "/31")
+	;(disable-timer AttackTimer)
+	;(enable-timer AttackTimer 300)
+;)
+
+;(defrule
+;	(timer-triggered AttackTimer)
+;	(current-age >= castle-age)
+;	(goal ATTACK YES)
+;	(not (goal oceanmap YES))
+;	(not (goal EnabledAttack NO))
+;	(population >= 200)
+;=>
+;	(chat-to-allies "¡¡¡¡HAAAAAAAAAAAAAAAAAAA LA CARGAAAAAAAAAAAAAA!!!!!")
+;	(chat-to-allies "/31")
+	;(disable-timer AttackTimer)
+	;(enable-timer AttackTimer 600)
+;)
+
+(defrule
+	(timer-triggered AttackTimer)
+        (current-age >= castle-age)
+	(goal ATTACK YES)
+	(goal oceanmap YES)
+	(not (goal EnabledAttack NO))
+	(population < 200)
+=>
+	(chat-to-allies "Lanzare mi armada al ataque")
+	(chat-to-allies "/31")
+	(attack-now)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 120)
+)
+
+(defrule
+	(timer-triggered AttackTimer)
+        (current-age >= castle-age)
+	(goal ATTACK YES)
+	(not (goal oceanmap YES))
+	(not (goal EnabledAttack NO))
+	(population >= 200)
+=>
+	(chat-to-allies "¡¡¡¡HAAAAAAAA todos a cubierta!!! ¡Mi armada es invensible jaja!!!!!")
+	(chat-to-allies "/31")
+	(attack-now)
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 240)
+)
+
+(defrule
+	(timer-triggered AttackTimer)
+	(goal isTreaty NO)
+	(goal ATTACK YES)
+	(goal EnabledAttack NO)
+	(not (goal Wonderr MYW))
+=>
+	(chat-to-allies "Señor, creo que es el momento de iniciar el ataque, me permite...")
+	(chat-to-allies "/39")
+	(disable-timer AttackTimer)
+	(enable-timer AttackTimer 600)
+)

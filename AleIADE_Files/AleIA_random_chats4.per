@@ -1,0 +1,493 @@
+
+(defrule
+  (game-time >= 20)
+=>
+(chat-to-all "40")
+(chat-to-all "Otra vez vos...?")
+(disable-self)
+)
+
+(defrule
+	(current-age == dark-age)
+	(players-current-age any-enemy == feudal-age)
+=>
+	(chat-to-all "Segui corriendo nomas...")
+	(disable-self)
+)
+
+(defrule	
+	(current-age <= feudal-age)
+	(players-current-age any-enemy == castle-age)
+=>
+	(chat-to-all "No me impresiona que avances de edad tan rapido")
+	(disable-self)
+)
+
+(defrule
+	(current-age == feudal-age)
+	(players-current-age any-enemy == dark-age)
+	(game-time > 1200)
+=>
+	(chat-to-enemies "Habiendo tantas edades en el juego ¿decidiste quedarte en la primera edad?")
+	(disable-self)
+)
+
+(defrule
+	(current-age == castle-age)
+	(players-current-age any-enemy < castle-age)
+	(game-time > 1800)
+=>
+	(chat-to-all "Parece que alguien le gusta la vida Feudal... jajaja")
+	(disable-self)
+)
+
+(defrule
+	(current-age == imperial-age)
+	(players-current-age any-enemy < imperial-age)
+	(game-time > 3650)
+=>
+	(chat-to-enemies "Yo estoy en la edad Imperial. ¿Y vos? =)")
+	(disable-self)
+)
+(defrule
+	(goal Advantage PLAYER)
+=>
+	(chat-to-all "Parece que llevo la delantera.")
+	(disable-self)
+)
+
+(defrule
+	(current-age >= castle-age)
+	(goal Advantage PLAYER)
+	(goal ArmyAdvantage PLAYER)
+=>
+	(chat-to-all "AleIA > you jaja")
+	(disable-self)
+)
+
+(defrule
+	(goal Advantage ENEMY)
+	(goal ArmyAdvantage ENEMY)
+=>
+	(chat-to-all "Media Buggeda esta Partida...")
+	(disable-self)
+)
+
+
+(defrule
+	(current-age == imperial-age)
+	(goal Advantage PLAYER)
+	(goal ArmyAdvantage PLAYER)
+=>
+	(chat-to-all "GG (?) xD")
+	(disable-self)
+)
+
+(defrule
+	(game-time > 3600)
+=>
+	(chat-to-all "Se paso el rato...")
+	(disable-self)
+)
+
+(defrule
+	(player-resigned any-ally)
+=>
+	(chat-to-all "Vengare su Muerte!")
+	(disable-self)
+)
+
+(defrule
+	(player-resigned any-enemy)
+=>
+	(chat-to-all "Que Grosso :)")
+	(chat-to-all "/11")
+	(disable-self)
+)
+
+
+(defrule
+	(random-number >= 1)
+	(random-number < 70)
+	(resource-found food)
+	(resource-found wood)
+	(resource-found gold)
+	(resource-found stone)
+=>
+	(chat-to-all "=)")
+	(disable-self)
+)
+
+(defrule
+	(population == 200)
+=>
+	(chat-to-all "¡A Full de población!")
+	(chat-to-all "/24")
+	(disable-self)
+)
+
+(defrule
+	(population >= 150)
+	(players-population every-enemy <= 30)
+=>
+	(chat-to-enemies "Rindanse, esta partida esta terminada.")
+	(chat-to-allies "¡Estamos GANANDO! :`)")
+	(chat-to-allies "/39")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 1)
+	(random-number < 40)
+	(building-type-count stone-wall-line > 0)
+	(research-completed ri-fortified-wall)
+=>
+	(chat-to-all "Alto Muro tengo :D")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 1)
+	(random-number < 70)
+	(unit-type-count man-at-arms > 0)
+	(research-completed ri-man-at-arms)
+
+=>
+	(chat-to-all "Voy a extrañar a las Milicias...")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 60)
+	(random-number < 100)
+	(unit-type-count champion > 0)
+	(research-completed ri-champion)
+
+=>
+	(chat-to-all "Vamos Campeones!!!")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 60)
+	(random-number < 100)
+	(research-completed ri-paladin)
+
+=>
+	(chat-to-all "PALADINES para Todos y Todas Carajo.")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 1)
+	(random-number < 30)
+	(unit-type-count heavy-camel > 0)
+	(research-completed ri-heavy-camel)
+
+=>
+	(chat-to-all "Mejor que el Piketero.")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 1)
+	(random-number < 40)
+	(research-completed ri-imperial-camel)
+
+=>
+	(chat-to-all "El Rey de los Camellos")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 50)
+	(random-number < 100)
+	(unit-type-count elite-eagle-warrior > 0)
+	(research-completed ri-elite-eagle-warrior)
+
+=>
+	(chat-to-all "Siempre me gustaron las Águilas :)")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count mangonel-line > 0)
+	(research-completed ri-siege-onager)
+
+=>
+	(chat-to-all "Pronto verán el Gran Poder de mis ONAGROS de ASEDIO!")
+	(disable-self)
+)
+
+(defrule
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count cannon-galleon-line > 0)
+	(research-completed ri-cannon-galleon)
+
+=>
+	(chat-to-all "Preparen los cañones.")
+	(disable-self)
+)
+
+(defrule
+	(players-unit-type-count any-enemy monk >= 5)
+=>
+	(chat-to-enemies "No le tengo miedo a esos Monjes jaja")
+	(chat-to-allies "¡El enemigo tiene muchos monjes!, ¡Ten cuidado!")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 125)
+	(game-time > 50)
+=>
+	(chat-to-all "Poca población... Le tenes miedo al Spam?")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 150)
+	(game-time > 50)
+=>
+	(chat-to-all "Interesante limite de Población.")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 175)
+	(game-time > 50)
+=>
+	(chat-to-all "Me gusta este limite de población, Tenemos mucho en comun :) ... Nah mentira.")
+	(disable-self)
+)
+
+(defrule
+        (population-cap == 200)
+	(game-time > 50)
+=>
+	(chat-to-all "Mucha Población... ¿Te gusta el Spam?")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected aztec)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Finalmente tiengo mas Jaguares que monjes jaja")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected briton)
+	(random-number >= 10)
+	(random-number < 30)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Pff... Puros arqueritos estos Ingleses...")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected byzantine)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Las Catafractas arrasan todo a su paso.")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected celtic)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "¿Son Azules o invaden pastos al final?")
+	(disable-self)
+)
+
+
+(defrule
+	(civ-selected chinese)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "No son 3 arqueros, es 1 solo arquero Chino que vale por 3. ^^")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected gothic)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "SPAAAAAMMMMMMMMMMM de Huscarlessssssssss!!!!!!")
+	(chat-to-all "¡Vamos Carajooooooo!!!!!")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected frankish)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "De donde saca tantas hachas para tirar? O.o")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected japanese)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Samurais... Para mi estan sobrevalorados.")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected korean)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Muchas Carretas de guerra... pero también Torres.")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected mayan)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Plumas Y Flechas. ¿Que mas se podria pedir?")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected spanish)
+	(random-number >= 1)
+	(random-number < 40)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Joder. ¿Como funcionan esos rifles?")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected viking)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "¡Se viene la gran invasion barbara!!!!")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected mongol)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Genshin kang un poroto.")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected turkish)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "¡Los voy a Cag4& a Tiros!")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected saracen)
+	(random-number >= 1)
+	(random-number < 40)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Los Camellos conquistaron el desierto. Y este mapa también jaja")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected persian)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Se vienen los ELEFANTES.")
+	(chat-to-all "Fin.")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected hun)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Paladines?... ¿Para que? Si tengo Antorchas =)")
+	(disable-self)
+)
+
+(defrule
+	(civ-selected teutonic)
+	(random-number >= 40)
+	(random-number < 100)
+	(unit-type-count my-unique-unit-line >= 20)
+=>
+	(chat-to-all "Ahora que tienen esos cuernos en la cabeza, son aun mas lentos...")
+	(disable-self)
+)
+
+(defrule
+	(timer-triggered chatTimer)
+	(current-age >= castle-age)
+	(goal ATTACK YES)
+	(not (goal oceanmap YES))
+	(not (goal EnabledAttack NO))
+	(population < 200)
+=>
+	(chat-to-allies "¡¡¡¡¡¡MUERTE... MUERTE A TODO AQUEL QUE NOS ESTORBEEEEEE!!!!!!")
+	(chat-to-allies "/31")
+	(disable-timer chatTimer)
+	(enable-timer chatTimer 300)
+)
+
+(defrule
+	(timer-triggered chatTimer)
+	(current-age >= castle-age)
+	(goal ATTACK YES)
+	(not (goal oceanmap YES))
+	(not (goal EnabledAttack NO))
+	(population >= 200)
+=>
+	(chat-to-allies "¡¡¡¡HAAAAAAAAAAAAAAAAAAA LA CARGAAAAAAAAAAAAAA!!!!!")
+	(chat-to-allies "/31")
+	(disable-timer chatTimer)
+	(enable-timer chatTimer 600)
+)
+
+(defrule
+	(goal 1 19)
+=>
+	(chat-to-all "Que desastre...")
+	(disable-self)
+)
